@@ -23,7 +23,6 @@
 [[constraint]]
   name = "github.com/micro/go-micro"
   version = "0.3.0"
-
 [[constraint]]
-  name = "github.com/go-sql-driver/mysql"
-  version = "1.3.0"
+  name = "github.com/go-redis/redis"
+  version = "6.8.0"

@@ -2,6 +2,7 @@ package storage
 
 type Storage interface {
 	Add(url string) error
+	GetUniqueKey() (int, error)
 }
 
 type Item struct {
