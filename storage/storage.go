@@ -1,11 +1,12 @@
 package storage
 
-type Storage interface {
-	Add(url string) error
-	GetUniqueKey() (int, error)
+type Cacher interface {
+	GetUniqueKey(key string) (int64, error)
+	SetUniqueKey(key string) error
 }
 
-type Item struct {
-	URL        string `json:"url"`
-	ShortedURL string `json:"shorted"`
+type Storage interface {
+	AddURL(short, origin string) error
+	GetURL(short string) (string, error)
+	Count() (int64, error)
 }

@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"url-shortener/handler"
-	"url-shortener/storage"
+	"url-shortener/storage/mysql"
+	"url-shortener/storage/redis"
 
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
@@ -12,7 +13,9 @@ import (
 
 // Config describes configuration of redis client
 type Config struct {
-	redisAddr, redisPass string
+	redisAddr,
+	redisPass,
+	mysqlAddr string
 }
 
 func main() {
@@ -31,6 +34,11 @@ func main() {
 				Usage:       "Describe Redis password",
 				Destination: &conf.redisPass,
 			},
+			cli.StringFlag{
+				Name:        "mysql-addr",
+				Usage:       "Describe MySQL address",
+				Destination: &conf.mysqlAddr,
+			},
 		),
 	)
 
@@ -40,15 +48,25 @@ func main() {
 		log.Fatalln("redis address is required, please specufy redis-addr flag")
 	}
 
-	log.Printf("redis address set to %v", conf.redisAddr)
-
-	s := service.Server()
-	st, err := storage.New(conf.redisAddr, conf.redisPass)
-	if err != nil {
-		log.Fatalf("could not create storage: %v", err)
+	if len(conf.mysqlAddr) == 0 {
+		log.Fatalln("MySQL address is required, please specufy mysql-addr flag")
 	}
 
-	s.Handle(s.NewHandler(handler.New(st)))
+	log.Printf("Redis address set to %v", conf.redisAddr)
+	log.Printf("MySQL address set to %v", conf.mysqlAddr)
+
+	s := service.Server()
+	cacher, err := redis.New(conf.redisAddr, conf.redisPass)
+	if err != nil {
+		log.Fatalf("could not create redis cacher: %v", err)
+	}
+
+	storage, err := mysql.New(conf.mysqlAddr)
+	if err != nil {
+		log.Fatalf("could not create MySQL storage: %v", err)
+	}
+
+	s.Handle(s.NewHandler(handler.New(cacher, storage)))
 
 	if err := service.Run(); err != nil {
 		fmt.Println(err)
