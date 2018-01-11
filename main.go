@@ -25,18 +25,18 @@ func main() {
 		micro.Version("latest"),
 		micro.Flags(
 			cli.StringFlag{
-				Name:        "redis-addr",
-				Usage:       "Describe Redis URL with 'host:port' format",
+				Name:        "REDIS_URL",
+				Usage:       "Describe Redis URL in 'host:port' format",
 				Destination: &conf.redisAddr,
 			},
 			cli.StringFlag{
-				Name:        "redis-pass",
+				Name:        "REDIS_PASS",
 				Usage:       "Describe Redis password",
 				Destination: &conf.redisPass,
 			},
 			cli.StringFlag{
-				Name:        "mysql-addr",
-				Usage:       "Describe MySQL address",
+				Name:        "MYSQL_URL",
+				Usage:       "Describe MySQL address in 'username:password@/db",
 				Destination: &conf.mysqlAddr,
 			},
 		),
@@ -45,11 +45,11 @@ func main() {
 	service.Init()
 
 	if len(conf.redisAddr) == 0 {
-		log.Fatalln("redis address is required, please specufy redis-addr flag")
+		log.Fatal("redis address is required, please specify REDIS_URL option")
 	}
 
 	if len(conf.mysqlAddr) == 0 {
-		log.Fatalln("MySQL address is required, please specufy mysql-addr flag")
+		log.Fatal("mysql address is required, please specify MYSQL_URL option")
 	}
 
 	log.Printf("Redis address set to %v", conf.redisAddr)
@@ -63,10 +63,11 @@ func main() {
 
 	storage, err := mysql.New(conf.mysqlAddr)
 	if err != nil {
-		log.Fatalf("could not create MySQL storage: %v", err)
+		log.Fatalf("could not create mysql storage: %v", err)
 	}
 
-	s.Handle(s.NewHandler(handler.New(cacher, storage)))
+	urlHandler := s.NewHandler(handler.New(cacher, storage))
+	s.Handle(urlHandler)
 
 	if err := service.Run(); err != nil {
 		fmt.Println(err)

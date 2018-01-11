@@ -1,3 +1,4 @@
+// Package handler provider implementation for RPC handler with two endpoints
 package handler
 
 import (
@@ -6,34 +7,34 @@ import (
 	"url-shortener/storage"
 )
 
-// URLHandler contains two endpoints to encode/decode URL
-type URLHandler struct {
+// UrlHandler contains two endpoints to encode/decode URL
+type UrlHandler struct {
 	cacher  storage.Cacher
 	storage storage.Storage
 }
 
-// Request type that contains URL field only
+// Request type that contains URL field
 type Request struct {
 	URL string `json:"url,omitempty"`
 }
 
 // EncodedResponse type that contains short version of URL
 type EncodedResponse struct {
-	ShortURL string `json:"shortUrl,omitempty"`
+	ShortURL string `json:"shortUrl"`
 }
 
-// DecodedResponse type that contains short version of URL
+// DecodedResponse type that contains original version of URL
 type DecodedResponse struct {
-	OriginURL string `json:"originUrl,omitempty"`
+	OriginURL string `json:"originUrl"`
 }
 
-// New instance of handler
-func New(cache storage.Cacher, storage storage.Storage) *URLHandler {
-	return &URLHandler{cache, storage}
+// New instance of RPC handler
+func New(cache storage.Cacher, storage storage.Storage) *UrlHandler {
+	return &UrlHandler{cache, storage}
 }
 
-// Encode endpoint to encode given URL and returns shortened one
-func (h *URLHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse) error {
+// Encode given URL and return short version
+func (h *UrlHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse) error {
 	var count int64
 	count, err := h.cacher.GetUniqueKey("key")
 	if err != nil {
@@ -56,7 +57,7 @@ func (h *URLHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse)
 }
 
 // Decode returns original URL
-func (h *URLHandler) Decode(ctx context.Context, r *Request, w *DecodedResponse) error {
+func (h *UrlHandler) Decode(ctx context.Context, r *Request, w *DecodedResponse) error {
 	origin, err := h.storage.GetURL(r.URL)
 	if err != nil {
 		return err
