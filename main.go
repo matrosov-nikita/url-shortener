@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
-	"url-shortener/handler"
-	"url-shortener/storage/mysql"
-	"url-shortener/storage/redis"
 
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
+	"github.com/url-shortener/handler"
+	"github.com/url-shortener/storage/mysql"
+	"github.com/url-shortener/storage/redis"
 )
 
 // Config describes configuration of redis client
@@ -28,16 +28,19 @@ func main() {
 				Name:        "REDIS_URL",
 				Usage:       "Describe Redis URL in 'host:port' format",
 				Destination: &conf.redisAddr,
+				EnvVar:      "REDIS_URL",
 			},
 			cli.StringFlag{
 				Name:        "REDIS_PASS",
 				Usage:       "Describe Redis password",
 				Destination: &conf.redisPass,
+				EnvVar:      "REDIS_PASS",
 			},
 			cli.StringFlag{
 				Name:        "MYSQL_URL",
 				Usage:       "Describe MySQL address in 'username:password@/db",
 				Destination: &conf.mysqlAddr,
+				EnvVar:      "MYSQL_URL",
 			},
 		),
 	)

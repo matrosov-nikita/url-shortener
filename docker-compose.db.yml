@@ -1,0 +1,27 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: my-network
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis-urlsho
+    ports:
+      - "6379:6379"
+
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=urls
+    container_name: mysql-urlsho
+    ports:
+      - "3306:3306"
+      
+  consul:
+    image: consul:latest
+    container_name: consul-urlsho
+    ports:
+      - "8500:8500"

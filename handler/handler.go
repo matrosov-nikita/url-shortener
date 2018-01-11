@@ -3,8 +3,9 @@ package handler
 
 import (
 	"context"
-	"url-shortener/encoder"
-	"url-shortener/storage"
+
+	"github.com/url-shortener/encoder"
+	"github.com/url-shortener/storage"
 )
 
 // UrlHandler contains two endpoints to encode/decode URL

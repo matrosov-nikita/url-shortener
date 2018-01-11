@@ -1,0 +1,30 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: my-network
+
+services:
+  service.urlsho:
+    build:
+      context: . 
+      dockerfile: Dockerfile
+    image: urlsho
+    environment:
+      - REDIS_URL=redis:6379
+      - MYSQL_URL=root:@tcp(mysql:3306)/urls
+      - MICRO_REGISTRY=consul
+      - MICRO_REGISTRY_ADDRESS=consul
+
+  microweb:
+    image: microhq/micro
+    container_name: microweb-urlsho
+    command: web
+    ports:
+      - "8082:8082"
+    environment:
+      - MICRO_REGISTRY=consul
+      - MICRO_REGISTRY_ADDRESS=consul
+      - MICRO_API_NAMESPACE=gomicro.api
+
+  
