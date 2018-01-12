@@ -4,6 +4,7 @@ package encoder
 const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 const base = int64(len(alphabet))
 
+// TODO first short URL is empty
 // Encode using given number
 func Encode(n int64) string {
 	var encoded string

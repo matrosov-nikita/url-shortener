@@ -3,6 +3,7 @@ package handler
 
 import (
 	"context"
+	"errors"
 
 	"github.com/url-shortener/encoder"
 	"github.com/url-shortener/storage"
@@ -49,7 +50,8 @@ func (h *UrlHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse)
 		return err
 	}
 
-	if err = h.cacher.SetUniqueKey("key"); err != nil {
+	//TODO: Redis key set as env variable
+	if err = h.cacher.IncrUniqueKey("key"); err != nil {
 		return err
 	}
 
@@ -61,7 +63,7 @@ func (h *UrlHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse)
 func (h *UrlHandler) Decode(ctx context.Context, r *Request, w *DecodedResponse) error {
 	origin, err := h.storage.GetURL(r.URL)
 	if err != nil {
-		return err
+		return errors.New("404")
 	}
 
 	w.OriginURL = origin

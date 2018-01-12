@@ -1,10 +1,12 @@
+// Package redis provides implementation for Cacher interface
 package redis
 
 import (
 	"github.com/go-redis/redis"
 )
 
-// New return redis storage instance
+// TODO should we pass DB?
+// New return redis cacher instance
 func New(addr, password string) (*cacher, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     addr,
@@ -31,7 +33,7 @@ func (c *cacher) GetUniqueKey(key string) (int64, error) {
 	return res, nil
 }
 
-func (c *cacher) SetUniqueKey(key string) error {
+func (c *cacher) IncrUniqueKey(key string) error {
 	_, err := c.client.Incr(key).Result()
 	return err
 }

@@ -10,6 +10,7 @@ services:
       context: . 
       dockerfile: Dockerfile
     image: urlsho
+    container_name: service-urlsho
     environment:
       - REDIS_URL=redis:6379
       - MYSQL_URL=root:@tcp(mysql:3306)/urls
@@ -25,6 +26,14 @@ services:
     environment:
       - MICRO_REGISTRY=consul
       - MICRO_REGISTRY_ADDRESS=consul
-      - MICRO_API_NAMESPACE=gomicro.api
 
+  microapi:
+    image: microhq/micro
+    container_name: microapi-urlsho
+    command: api --handler=rpc
+    ports:
+      - "8080:8080"
+    environment:
+      - MICRO_REGISTRY=consul
+      - MICRO_REGISTRY_ADDRESS=consul
   

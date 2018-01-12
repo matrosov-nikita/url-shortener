@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/micro/cli"
@@ -13,58 +12,58 @@ import (
 
 // Config describes configuration of redis client
 type Config struct {
-	redisAddr,
+	redisURI,
 	redisPass,
-	mysqlAddr string
+	mysqlURI string
 }
 
 func main() {
 	conf := new(Config)
 	service := micro.NewService(
-		micro.Name("url-shortener"),
+		micro.Name("go.micro.api.urlshortener"),
 		micro.Version("latest"),
 		micro.Flags(
 			cli.StringFlag{
-				Name:        "REDIS_URL",
-				Usage:       "Describe Redis URL in 'host:port' format",
-				Destination: &conf.redisAddr,
-				EnvVar:      "REDIS_URL",
+				Name:        "redis_uri",
+				Usage:       "Describe Redis URI in 'host:port' format",
+				Destination: &conf.redisURI,
+				EnvVar:      "redis_uri",
 			},
 			cli.StringFlag{
-				Name:        "REDIS_PASS",
+				Name:        "redis_pass",
 				Usage:       "Describe Redis password",
 				Destination: &conf.redisPass,
-				EnvVar:      "REDIS_PASS",
+				EnvVar:      "redis_pass",
 			},
 			cli.StringFlag{
-				Name:        "MYSQL_URL",
-				Usage:       "Describe MySQL address in 'username:password@/db",
-				Destination: &conf.mysqlAddr,
-				EnvVar:      "MYSQL_URL",
+				Name:        "mysql_uri",
+				Usage:       "Describe MySQL URI in 'username:password@/db",
+				Destination: &conf.mysqlURI,
+				EnvVar:      "mysql_uri",
 			},
 		),
 	)
 
 	service.Init()
 
-	if len(conf.redisAddr) == 0 {
-		log.Fatal("redis address is required, please specify REDIS_URL option")
+	if len(conf.redisURI) == 0 {
+		log.Fatal("redis URI is required, please specify redis_uri option")
 	}
 
-	if len(conf.mysqlAddr) == 0 {
-		log.Fatal("mysql address is required, please specify MYSQL_URL option")
+	if len(conf.mysqlURI) == 0 {
+		log.Fatal("mysql URI is required, please specify mysql_uri option")
 	}
 
-	log.Printf("Redis address set to %v", conf.redisAddr)
-	log.Printf("MySQL address set to %v", conf.mysqlAddr)
+	log.Printf("Redis address set to %v", conf.redisURI)
+	log.Printf("MySQL address set to %v", conf.mysqlURI)
 
 	s := service.Server()
-	cacher, err := redis.New(conf.redisAddr, conf.redisPass)
+	cacher, err := redis.New(conf.redisURI, conf.redisPass)
 	if err != nil {
 		log.Fatalf("could not create redis cacher: %v", err)
 	}
 
-	storage, err := mysql.New(conf.mysqlAddr)
+	storage, err := mysql.New(conf.mysqlURI)
 	if err != nil {
 		log.Fatalf("could not create mysql storage: %v", err)
 	}
@@ -73,6 +72,6 @@ func main() {
 	s.Handle(urlHandler)
 
 	if err := service.Run(); err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }

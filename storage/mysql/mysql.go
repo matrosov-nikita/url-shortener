@@ -1,3 +1,4 @@
+// Package mysql provides implementation for Storage interface
 package mysql
 
 import (
@@ -6,20 +7,20 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func New(address string) (*sqlStorage, error) {
-	db, err := sql.Open("mysql", address)
+func New(addr string) (*sqlStorage, error) {
+	db, err := sql.Open("mysql", addr)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = create(db); err != nil {
+	if err = createTable(db); err != nil {
 		return nil, err
 	}
 
 	return &sqlStorage{db}, nil
 }
 
-func create(db *sql.DB) error {
+func createTable(db *sql.DB) error {
 	stmt, err := db.Prepare(`CREATE TABLE IF NOT EXISTS urls 
 		(id int NOT NULL AUTO_INCREMENT, 
 		short_url varchar(200), 
@@ -47,7 +48,7 @@ func (s *sqlStorage) Count() (int64, error) {
 }
 
 func (s *sqlStorage) AddURL(short, origin string) error {
-	stmt, err := s.db.Prepare("INSERT urls SET short_url=?,origin_url=?")
+	stmt, err := s.db.Prepare("INSERT INTO urls (short_url, origin_url) VALUES (?, ?)")
 	if err != nil {
 		return err
 	}
@@ -60,7 +61,7 @@ func (s *sqlStorage) AddURL(short, origin string) error {
 }
 
 func (s *sqlStorage) GetURL(short string) (string, error) {
-	stmt, err := s.db.Prepare("select origin_url from urls where short_url=?")
+	stmt, err := s.db.Prepare("SELECT origin_url FROM urls WHERE short_url=?")
 	if err != nil {
 		return "", err
 	}
