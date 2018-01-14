@@ -1,20 +1,21 @@
-// Package redis provides implementation for Cacher interface
+// Package redis provides implementation for Cacher interface.
 package redis
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/url-shortener/storage"
 )
 
-// TODO should we pass DB?
-// New return redis cacher instance
-func New(addr, password string) (*cacher, error) {
-	client := redis.NewClient(&redis.Options{
-		Addr:     addr,
-		Password: password,
-		DB:       0,
-	})
+// New creates redis cacher instance.
+func New(redisURL string) (storage.Cacher, error) {
+	opts, err := redis.ParseURL(redisURL)
+	if err != nil {
+		return nil, err
+	}
 
-	_, err := client.Ping().Result()
+	client := redis.NewClient(opts)
+
+	_, err = client.Ping().Result()
 	if err != nil {
 		return nil, err
 	}

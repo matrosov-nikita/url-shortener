@@ -1,4 +1,4 @@
-// Package handler provider implementation for RPC handler with two endpoints
+// Package handler provides implementation for RPC handler with two endpoints.
 package handler
 
 import (
@@ -9,36 +9,42 @@ import (
 	"github.com/url-shortener/storage"
 )
 
-// UrlHandler contains two endpoints to encode/decode URL
-type UrlHandler struct {
+// URLHandler contains two endpoints to encode/decode URL.
+type URLHandler struct {
 	cacher  storage.Cacher
 	storage storage.Storage
 }
 
-// Request type that contains URL field
-type Request struct {
+// URLRequest type with URL field.
+type URLRequest struct {
 	URL string `json:"url,omitempty"`
 }
 
-// EncodedResponse type that contains short version of URL
+// EncodedResponse type with ShortURL field.
 type EncodedResponse struct {
 	ShortURL string `json:"shortUrl"`
 }
 
-// DecodedResponse type that contains original version of URL
+// DecodedResponse type with OriginURL field.
 type DecodedResponse struct {
-	OriginURL string `json:"originUrl"`
+	OriginalURL string `json:"originUrl"`
 }
 
-// New instance of RPC handler
-func New(cache storage.Cacher, storage storage.Storage) *UrlHandler {
-	return &UrlHandler{cache, storage}
+const redisKey = "key"
+
+// New instance of RPC handler.
+func New(cache storage.Cacher, storage storage.Storage) *URLHandler {
+	return &URLHandler{cache, storage}
 }
 
-// Encode given URL and return short version
-func (h *UrlHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse) error {
+// Encode method encodes given URL and return short version.
+func (h *URLHandler) Encode(ctx context.Context, r *URLRequest, w *EncodedResponse) error {
+	if len(r.URL) == 0 {
+		return errors.New("URL could not be empty")
+	}
+
 	var count int64
-	count, err := h.cacher.GetUniqueKey("key")
+	count, err := h.cacher.GetUniqueKey(redisKey)
 	if err != nil {
 		if count, err = h.storage.Count(); err != nil {
 			return err
@@ -50,8 +56,7 @@ func (h *UrlHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse)
 		return err
 	}
 
-	//TODO: Redis key set as env variable
-	if err = h.cacher.IncrUniqueKey("key"); err != nil {
+	if err = h.cacher.IncrUniqueKey(redisKey); err != nil {
 		return err
 	}
 
@@ -59,13 +64,14 @@ func (h *UrlHandler) Encode(ctx context.Context, r *Request, w *EncodedResponse)
 	return nil
 }
 
-// Decode returns original URL
-func (h *UrlHandler) Decode(ctx context.Context, r *Request, w *DecodedResponse) error {
+// Decode method decodes short URL and returns original URL version.
+func (h *URLHandler) Decode(ctx context.Context, r *URLRequest, w *DecodedResponse) error {
 	origin, err := h.storage.GetURL(r.URL)
+
 	if err != nil {
-		return errors.New("404")
+		return err
 	}
 
-	w.OriginURL = origin
+	w.OriginalURL = origin
 	return nil
 }

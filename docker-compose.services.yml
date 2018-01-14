@@ -12,18 +12,8 @@ services:
     image: urlsho
     container_name: service-urlsho
     environment:
-      - REDIS_URL=redis:6379
-      - MYSQL_URL=root:@tcp(mysql:3306)/urls
-      - MICRO_REGISTRY=consul
-      - MICRO_REGISTRY_ADDRESS=consul
-
-  microweb:
-    image: microhq/micro
-    container_name: microweb-urlsho
-    command: web
-    ports:
-      - "8082:8082"
-    environment:
+      - REDIS_URI=redis://root:@redis:6379/0
+      - MYSQL_URI=test:test@tcp(mysql:3306)/urls
       - MICRO_REGISTRY=consul
       - MICRO_REGISTRY_ADDRESS=consul
 
@@ -36,4 +26,5 @@ services:
     environment:
       - MICRO_REGISTRY=consul
       - MICRO_REGISTRY_ADDRESS=consul
+      - MICRO_API_NAMESPACE=my.service
   

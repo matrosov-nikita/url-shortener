@@ -6,16 +6,20 @@ networks:
 
 services:
   redis:
-    image: redis:alpine
+    image: redis:latest
     container_name: redis-urlsho
     ports:
       - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=test
 
   mysql:
     image: mysql:latest
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_ROOT_PASSWORD=test
       - MYSQL_DATABASE=urls
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
     container_name: mysql-urlsho
     ports:
       - "3306:3306"

@@ -5,9 +5,11 @@ import (
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/url-shortener/storage"
 )
 
-func New(addr string) (*sqlStorage, error) {
+// New creates new instance of MySQL storage.
+func New(addr string) (storage.Storage, error) {
 	db, err := sql.Open("mysql", addr)
 	if err != nil {
 		return nil, err
@@ -23,7 +25,7 @@ func New(addr string) (*sqlStorage, error) {
 func createTable(db *sql.DB) error {
 	stmt, err := db.Prepare(`CREATE TABLE IF NOT EXISTS urls 
 		(id int NOT NULL AUTO_INCREMENT, 
-		short_url varchar(200), 
+		short_url varchar(20), 
 		origin_url varchar(400), 
 		PRIMARY KEY (id));`)
 
@@ -61,7 +63,7 @@ func (s *sqlStorage) AddURL(short, origin string) error {
 }
 
 func (s *sqlStorage) GetURL(short string) (string, error) {
-	stmt, err := s.db.Prepare("SELECT origin_url FROM urls WHERE short_url=?")
+	stmt, err := s.db.Prepare("SELECT origin_url FROM urls WHERE binary short_url=?")
 	if err != nil {
 		return "", err
 	}

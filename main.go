@@ -10,36 +10,29 @@ import (
 	"github.com/url-shortener/storage/redis"
 )
 
-// Config describes configuration of redis client
+// Config describes configuration for databases
 type Config struct {
 	redisURI,
-	redisPass,
 	mysqlURI string
 }
 
 func main() {
 	conf := new(Config)
 	service := micro.NewService(
-		micro.Name("go.micro.api.urlshortener"),
+		micro.Name("my.service.urlshortener"),
 		micro.Version("latest"),
 		micro.Flags(
 			cli.StringFlag{
 				Name:        "redis_uri",
-				Usage:       "Describe Redis URI in 'host:port' format",
+				Usage:       "Describe Redis URI",
 				Destination: &conf.redisURI,
-				EnvVar:      "redis_uri",
-			},
-			cli.StringFlag{
-				Name:        "redis_pass",
-				Usage:       "Describe Redis password",
-				Destination: &conf.redisPass,
-				EnvVar:      "redis_pass",
+				EnvVar:      "REDIS_URI",
 			},
 			cli.StringFlag{
 				Name:        "mysql_uri",
-				Usage:       "Describe MySQL URI in 'username:password@/db",
+				Usage:       "Describe MySQL URI",
 				Destination: &conf.mysqlURI,
-				EnvVar:      "mysql_uri",
+				EnvVar:      "MYSQL_URI",
 			},
 		),
 	)
@@ -47,18 +40,18 @@ func main() {
 	service.Init()
 
 	if len(conf.redisURI) == 0 {
-		log.Fatal("redis URI is required, please specify redis_uri option")
+		log.Fatal("redis URI is required")
 	}
 
 	if len(conf.mysqlURI) == 0 {
-		log.Fatal("mysql URI is required, please specify mysql_uri option")
+		log.Fatal("mysql URI is required")
 	}
 
 	log.Printf("Redis address set to %v", conf.redisURI)
 	log.Printf("MySQL address set to %v", conf.mysqlURI)
 
 	s := service.Server()
-	cacher, err := redis.New(conf.redisURI, conf.redisPass)
+	cacher, err := redis.New(conf.redisURI)
 	if err != nil {
 		log.Fatalf("could not create redis cacher: %v", err)
 	}
