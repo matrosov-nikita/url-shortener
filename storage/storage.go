@@ -4,9 +4,9 @@ package storage
 // Cacher interface
 type Cacher interface {
 	// GetUniqueKey return value of given key from redis.
-	GetUniqueKey(key string) (int64, error)
+	GetUniqueKey() (int64, error)
 	// IncrUniqueKey method increments given key from redis.
-	IncrUniqueKey(key string) error
+	IncrUniqueKey() error
 }
 
 // Storage interface

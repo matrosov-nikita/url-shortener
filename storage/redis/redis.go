@@ -6,6 +6,8 @@ import (
 	"github.com/url-shortener/storage"
 )
 
+const redisKey = "key"
+
 // New creates redis cacher instance.
 func New(redisURL string) (storage.Cacher, error) {
 	opts, err := redis.ParseURL(redisURL)
@@ -25,8 +27,8 @@ func New(redisURL string) (storage.Cacher, error) {
 
 type cacher struct{ client *redis.Client }
 
-func (c *cacher) GetUniqueKey(key string) (int64, error) {
-	res, err := c.client.Get(key).Int64()
+func (c *cacher) GetUniqueKey() (int64, error) {
+	res, err := c.client.Get(redisKey).Int64()
 	if err != nil {
 		return 0, err
 	}
@@ -34,7 +36,7 @@ func (c *cacher) GetUniqueKey(key string) (int64, error) {
 	return res, nil
 }
 
-func (c *cacher) IncrUniqueKey(key string) error {
-	_, err := c.client.Incr(key).Result()
+func (c *cacher) IncrUniqueKey() error {
+	_, err := c.client.Incr(redisKey).Result()
 	return err
 }

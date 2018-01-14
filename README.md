@@ -1,6 +1,10 @@
-Должны быть установлены `docker` и `docker-compose`
+Должны быть установлены `docker`, `docker-compose`, `go`
 
-### Запуск  
+### Запуск
+Запустить билд:
+```
+$ go build
+```     
 Создать docker сеть:
 ```
 $ docker network create my-network

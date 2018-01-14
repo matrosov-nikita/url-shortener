@@ -15,9 +15,14 @@ type URLHandler struct {
 	storage storage.Storage
 }
 
+// New instance of RPC handler.
+func New(cache storage.Cacher, storage storage.Storage) *URLHandler {
+	return &URLHandler{cache, storage}
+}
+
 // URLRequest type with URL field.
 type URLRequest struct {
-	URL string `json:"url,omitempty"`
+	URL string `json:"url"`
 }
 
 // EncodedResponse type with ShortURL field.
@@ -30,13 +35,6 @@ type DecodedResponse struct {
 	OriginalURL string `json:"originUrl"`
 }
 
-const redisKey = "key"
-
-// New instance of RPC handler.
-func New(cache storage.Cacher, storage storage.Storage) *URLHandler {
-	return &URLHandler{cache, storage}
-}
-
 // Encode method encodes given URL and return short version.
 func (h *URLHandler) Encode(ctx context.Context, r *URLRequest, w *EncodedResponse) error {
 	if len(r.URL) == 0 {
@@ -44,7 +42,7 @@ func (h *URLHandler) Encode(ctx context.Context, r *URLRequest, w *EncodedRespon
 	}
 
 	var count int64
-	count, err := h.cacher.GetUniqueKey(redisKey)
+	count, err := h.cacher.GetUniqueKey()
 	if err != nil {
 		if count, err = h.storage.Count(); err != nil {
 			return err
@@ -56,7 +54,7 @@ func (h *URLHandler) Encode(ctx context.Context, r *URLRequest, w *EncodedRespon
 		return err
 	}
 
-	if err = h.cacher.IncrUniqueKey(redisKey); err != nil {
+	if err = h.cacher.IncrUniqueKey(); err != nil {
 		return err
 	}
 
@@ -67,11 +65,6 @@ func (h *URLHandler) Encode(ctx context.Context, r *URLRequest, w *EncodedRespon
 // Decode method decodes short URL and returns original URL version.
 func (h *URLHandler) Decode(ctx context.Context, r *URLRequest, w *DecodedResponse) error {
 	origin, err := h.storage.GetURL(r.URL)
-
-	if err != nil {
-		return err
-	}
-
 	w.OriginalURL = origin
-	return nil
+	return err
 }
