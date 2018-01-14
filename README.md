@@ -1,6 +1,6 @@
 Должны быть установлены `docker`, `docker-compose`, `go`
 
-### Запуск
+### Запуск:
 Запустить билд:
 ```
 $ go build
@@ -15,7 +15,7 @@ $ docker-compose -f docker-compose.db.yml up -d
 ```
 Убедиться что все сервисы для бд успешно стартовавли (поле State должно быть Up):  
 ```
-$ docker -f docker-compose.db.yml ps
+$ docker-compose -f docker-compose.db.yml ps
 ```
 Запустить микросервисы
 ```
@@ -34,8 +34,41 @@ $ docker-compose -f docker-compose.services.yml up -d
     -decode string
     	URL для декодирования
     -encode string
-    	URL для кодирования
+    	URL для кодирования 
 
+### Использование Web-клиента:   
+См. https://github.com/matrosov-nikita/url-shortener-web-client  
+
+### API
+
+Endpoint: URLHandler.Encode  
+
+```
+// Request содержит URL для кодирования
+Request: {
+	url string 
+}
+
+// Response содержит сокращенную ссылку
+Response: {
+	short_url string
+}
+```
+
+
+Endpoint: URLHandler.Decode  
+
+```
+// Request содержит сокращенную ссылку для декодирования
+Request: {
+    url string
+}
+
+// Response содержит оригинальный URL
+Response: {
+	origin_url string
+}
+```
 
 
 
