@@ -1,15 +1,12 @@
 version: "3"
 networks:
   default:
-    external:
-      name: my-network
+    driver: bridge
 
 services:
   redis:
     image: redis:latest
     container_name: redis-urlsho
-    ports:
-      - "6379:6379"
     environment:
       - REDIS_PASSWORD=test
 
@@ -21,11 +18,7 @@ services:
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test
     container_name: mysql-urlsho
-    ports:
-      - "3306:3306"
       
   consul:
     image: consul:latest
     container_name: consul-urlsho
-    ports:
-      - "8500:8500"

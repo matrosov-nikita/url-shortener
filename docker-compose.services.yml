@@ -1,8 +1,7 @@
 version: "3"
 networks:
   default:
-    external:
-      name: my-network
+    driver: bridge
 
 services:
   service.urlsho:
@@ -17,12 +16,21 @@ services:
       - MICRO_REGISTRY=consul
       - MICRO_REGISTRY_ADDRESS=consul
 
+  web.urlsho:
+    build:
+      context: ./url-shortener-web-client
+      dockerfile: Dockerfile
+    image: web-urlsho
+    container_name: web-urlsho
+    environment:
+      - API_URL=http://microapi:8080
+    ports:
+      - "3000:3000"
+  
   microapi:
     image: microhq/micro
     container_name: microapi-urlsho
     command: api --handler=rpc
-    ports:
-      - "8080:8080"
     environment:
       - MICRO_REGISTRY=consul
       - MICRO_REGISTRY_ADDRESS=consul

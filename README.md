@@ -1,10 +1,7 @@
-Должны быть установлены `docker`, `docker-compose`, `go`
+Должны быть установлены `docker`, `docker-compose`
 
 ### Запуск:
-Запустить билд:
-```
-$ go build
-```     
+    
 Создать docker сеть:
 ```
 $ docker network create my-network
@@ -12,10 +9,6 @@ $ docker network create my-network
 Запустить сервисы для бд:
 ```
 $ docker-compose -f docker-compose.db.yml up -d
-```
-Убедиться что все сервисы для бд успешно стартовавли (поле State должно быть Up):  
-```
-$ docker-compose -f docker-compose.db.yml ps
 ```
 Запустить микросервисы
 ```
@@ -37,7 +30,7 @@ $ docker-compose -f docker-compose.services.yml up -d
     	URL для кодирования 
 
 ### Использование Web-клиента:   
-См. https://github.com/matrosov-nikita/url-shortener-web-client  
+Открыть localhost:3000  
 
 ### API
 

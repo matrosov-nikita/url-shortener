@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
+	"github.com/matrosov-nikita/url-shortener/handler"
+	"github.com/matrosov-nikita/url-shortener/storage/mysql"
+	"github.com/matrosov-nikita/url-shortener/storage/redis"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
-	"github.com/url-shortener/handler"
-	"github.com/url-shortener/storage/mysql"
-	"github.com/url-shortener/storage/redis"
 )
 
 // Config describes configuration for databases

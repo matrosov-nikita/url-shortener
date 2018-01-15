@@ -5,8 +5,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/url-shortener/encoder"
-	"github.com/url-shortener/storage"
+	"github.com/matrosov-nikita/url-shortener/encoder"
+	"github.com/matrosov-nikita/url-shortener/storage"
 )
 
 // URLHandler contains two endpoints to encode/decode URL.

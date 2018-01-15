@@ -3,7 +3,7 @@ package redis
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/url-shortener/storage"
+	"github.com/matrosov-nikita/url-shortener/storage"
 )
 
 const redisKey = "key"

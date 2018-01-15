@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/url-shortener/storage"
+	"github.com/matrosov-nikita/url-shortener/storage"
 )
 
 // New creates new instance of MySQL storage.
