@@ -1,14 +1,12 @@
-import React from 'react'
+import React from 'react';
 import { connect } from 'react-redux';
 import { encodeURL } from '../actions';
-import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/lib/Button';
-import Label from 'react-bootstrap/lib/Label';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import '../styles/styles.css';
-
+import 'bootstrap/dist/css/bootstrap.css';
 
 class AddURL extends React.Component {
   constructor(props) {
@@ -48,7 +46,7 @@ class AddURL extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   handleChange(event) {
@@ -56,16 +54,16 @@ class AddURL extends React.Component {
   }
 
   handleSubmit(e) {
-      this.props.encodeURL(this.state.value);
-      this.setState({ value: '' });
-      e.preventDefault();
+    this.props.encodeURL(this.state.value);
+    this.setState({ value: '' });
+    e.preventDefault();
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     encodeURL: (origin) => dispatch(encodeURL(origin))
-  }
-}
+  };
+};
 
 export default connect(null, mapDispatchToProps)(AddURL);

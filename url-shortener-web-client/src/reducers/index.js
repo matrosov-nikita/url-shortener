@@ -1,7 +1,7 @@
-import { ADD_URL, TOGGLE_MODAL } from '../actions'
-import { combineReducers } from 'redux'
+import { ADD_URL, TOGGLE_MODAL } from '../actions';
+import { combineReducers } from 'redux';
 
-function urls(state = {}, action) {
+const urls = (state = {}, action) => {
   switch (action.type) {
     case ADD_URL: {
       return {
@@ -10,19 +10,19 @@ function urls(state = {}, action) {
       };
     }
 
-    default: return state
+    default: return state;
   }
-}
+};
 
-function visibilityFilter(state = false, action) {
+const visibilityFilter = (state = false, action) => {
   switch (action.type) {
     case TOGGLE_MODAL: {
       return !state;
     }
 
-    default: return state
+    default: return state;
   }
-}
+};
 
 
 export default combineReducers({ urls, visibilityFilter });

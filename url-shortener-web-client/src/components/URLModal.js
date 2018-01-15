@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+const SERVER_URL = 'http://localhost:3000';
 class URLModal extends React.Component {
   constructor(props) {
     super(props);
@@ -28,12 +29,12 @@ class URLModal extends React.Component {
           <Modal.Body>
             <FormControl
               type="text"
-              value={`http://localhost:3000/${this.props.urls.shortURL}`}
+              value={`${SERVER_URL}/${this.props.urls.shortURL}`}
               onFocus={this.handleFocus}
               readOnly
             />
-            <CopyToClipboard text={`http://localhost:3000/${this.props.urls.shortURL}`} onCopy={this.onCopy}>
-                <Button bsStyle="success"> Copy </Button>
+            <CopyToClipboard text={`${SERVER_URL}/${this.props.urls.shortURL}`} onCopy={this.onCopy}>
+              <Button bsStyle="success"> Copy </Button>
             </CopyToClipboard>
           </Modal.Body>
         </Modal>
@@ -54,13 +55,13 @@ const mapStateToProps = (state) => {
   return {
     urls: state.urls,
     visibility: state.visibilityFilter
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleModal: () => dispatch(toggleModal())
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(URLModal);
