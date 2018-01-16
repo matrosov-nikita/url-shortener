@@ -6,7 +6,7 @@
 ```
 $ docker-compose -f docker-compose.db.yml up -d
 ```
-Запустить микросервисы (!перед запуском убедиться что сервисы для бд успешно стартовали)
+Запустить микросервисы (*перед запуском убедиться что сервисы для бд успешно стартовали*)
 ```
 $ docker-compose -f docker-compose.services.yml up -d
 ```
@@ -22,7 +22,7 @@ $ go build
 $ ./urlsho-cli --apiURL=<HOST:PORT> --encode(or --decode)=<URL>
 ```
 
-    -apiURL string
+    -apiURL string [optional]
     	API URL в формате host:port  (default "http://localhost:8080")
     -decode string
     	URL для декодирования
