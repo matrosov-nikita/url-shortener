@@ -8,8 +8,8 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 const SERVER_URL = 'http://localhost:3000';
 class URLModal extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       value: '',
       copied: false,

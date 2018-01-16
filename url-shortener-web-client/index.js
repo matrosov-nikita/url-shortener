@@ -22,10 +22,7 @@ app.post('/encode', (req, res, next) => {
   rp(genURLOptions('encode', req.body)).then(resp => {
     res.send(resp);
   }).catch(err => {
-    next({
-      code: 500,
-      message: `could not encode: ${err}`
-    });
+    next(err.response.body);
   });
 });
 
@@ -37,8 +34,8 @@ app.get('/:hash', (req, res) => {
   }).then(URL => res.redirect(URL));
 });
 
-app.use((err, req, res) => {
-  res.status(err.code).send(err.message);
+app.use((err, req, res, next) => {
+  res.status(err.code).send(err);
 });
 
 app.listen(3000);

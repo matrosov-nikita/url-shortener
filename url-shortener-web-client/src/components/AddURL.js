@@ -9,8 +9,8 @@ import '../styles/styles.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 class AddURL extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       value: ''
     };

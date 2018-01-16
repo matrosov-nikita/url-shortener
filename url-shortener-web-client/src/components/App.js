@@ -5,10 +5,6 @@ import URLModal from './URLModal';
 import AddURLError from './AddURLError';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>

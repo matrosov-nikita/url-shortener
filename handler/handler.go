@@ -38,7 +38,7 @@ type DecodedResponse struct {
 
 // Encode method encodes given URL and return short version.
 func (h *URLHandler) Encode(ctx context.Context, r *URLRequest, w *EncodedResponse) error {
-	if valid := govalidator.IsURL(r.URL); !valid {
+	if !govalidator.IsURL(r.URL) {
 		return errors.New("URL is not valid")
 	}
 
@@ -65,10 +65,6 @@ func (h *URLHandler) Encode(ctx context.Context, r *URLRequest, w *EncodedRespon
 
 // Decode method decodes short URL and returns original URL version.
 func (h *URLHandler) Decode(ctx context.Context, r *URLRequest, w *DecodedResponse) error {
-	if !encoder.IsValidHash(r.URL) {
-		return errors.New("URL is not valid")
-	}
-
 	origin, err := h.storage.GetURL(r.URL)
 	w.OriginalURL = origin
 	return err

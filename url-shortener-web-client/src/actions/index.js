@@ -29,7 +29,7 @@ export function encodeURL(originURL) {
       dispatch(addURL(originURL, resp.data.shortUrl));
       dispatch(toggleModal());
     }).catch(err => {
-      dispatch(addError(err));
+      dispatch(addError(err.response.data));
     });
   };
 }
