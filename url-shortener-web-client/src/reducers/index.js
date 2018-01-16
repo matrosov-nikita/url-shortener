@@ -1,4 +1,4 @@
-import { ADD_URL, TOGGLE_MODAL } from '../actions';
+import { ADD_URL, ADD_ERROR, REMOVE_ERRORS, TOGGLE_MODAL } from '../actions';
 import { combineReducers } from 'redux';
 
 const urls = (state = {}, action) => {
@@ -14,7 +14,7 @@ const urls = (state = {}, action) => {
   }
 };
 
-const visibilityFilter = (state = false, action) => {
+const modalWindowVisibility = (state = false, action) => {
   switch (action.type) {
     case TOGGLE_MODAL: {
       return !state;
@@ -24,5 +24,19 @@ const visibilityFilter = (state = false, action) => {
   }
 };
 
+const errors = (state = [], action) => {
+  switch (action.type) {
+    case ADD_ERROR: {
+      return state.concat(action.error);
+    };
 
-export default combineReducers({ urls, visibilityFilter });
+    case REMOVE_ERRORS: {
+      return [];
+    };
+
+    default: return state;
+  }
+}
+
+
+export default combineReducers({ urls, modalWindowVisibility, errors });

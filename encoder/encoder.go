@@ -1,6 +1,8 @@
 // Package encoder provides implementation for encoding based on given number.
 package encoder
 
+import "strings"
+
 const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 const base = int64(len(alphabet))
 
@@ -18,4 +20,19 @@ func Encode(n int64) string {
 	}
 
 	return encoded
+}
+
+// IsValidHash validates hash
+func IsValidHash(hash string) bool {
+	if len(hash) == 0 {
+		return false
+	}
+
+	for _, c := range hash {
+		if !strings.Contains(alphabet, string(c)) {
+			return false
+		}
+	}
+
+	return true
 }

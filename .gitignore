@@ -4,3 +4,4 @@ url-shortener-web-client/node_modules
 url-shortener-web-client/public/*
 !url-shortener-web-client/public/index.html
 url-shortener-web-client/npm-debug.log
+.DS_Store

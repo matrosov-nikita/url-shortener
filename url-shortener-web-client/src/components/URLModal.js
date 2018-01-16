@@ -54,7 +54,7 @@ class URLModal extends React.Component {
 const mapStateToProps = (state) => {
   return {
     urls: state.urls,
-    visibility: state.visibilityFilter
+    visibility: state.modalWindowVisibility
   };
 };
 

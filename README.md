@@ -6,16 +6,20 @@
 ```
 $ docker-compose -f docker-compose.db.yml up -d
 ```
-Запустить микросервисы
+Запустить микросервисы (!перед запуском убедиться что сервисы для бд успешно стартовали)
 ```
 $ docker-compose -f docker-compose.services.yml up -d
 ```
 
 ### Использование CLI клиента:
 ```
-    1. cd urlsho-cli
-    2. go build
-    3. ./urlsho-cli --apiURL=<HOST:PORT> --encode(or --decode)=<URL>
+$ cd urlsho-cli
+```
+```
+$ go build
+```
+```
+$ ./urlsho-cli --apiURL=<HOST:PORT> --encode(or --decode)=<URL>
 ```
 
     -apiURL string

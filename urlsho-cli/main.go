@@ -16,13 +16,7 @@ func main() {
 	encode := flag.String("encode", "", "URL to encode")
 	decode := flag.String("decode", "", "URL to decode")
 	apiURL := flag.String("apiURL", "http://localhost:8080", "API URL in host:port format ")
-
 	flag.Parse()
-
-	if len(*apiURL) == 0 {
-		log.Fatal("API URL is required")
-	}
-
 	bothEmpty := len(*encode) == 0 && len(*decode) == 0
 	bothFull := len(*encode) > 0 && len(*decode) > 0
 	if bothEmpty || bothFull {

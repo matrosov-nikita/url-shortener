@@ -26,7 +26,7 @@ func createTable(db *sql.DB) error {
 	stmt, err := db.Prepare(`CREATE TABLE IF NOT EXISTS urls 
 		(id int NOT NULL AUTO_INCREMENT, 
 		short_url varchar(20), 
-		origin_url varchar(400), 
+		origin_url varchar(400) character set 'utf8',
 		PRIMARY KEY (id));`)
 
 	if err != nil {
